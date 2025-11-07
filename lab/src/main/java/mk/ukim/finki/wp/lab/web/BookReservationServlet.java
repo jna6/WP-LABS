@@ -21,8 +21,6 @@ public class BookReservationServlet extends HttpServlet {
     private final SpringTemplateEngine templateEngine;
     private final BookReservationService bookReservationService;
 
-    private static final int MAX_RECENTLY_VIEWED = 3;
-
     public BookReservationServlet(SpringTemplateEngine templateEngine, BookReservationService bookReservationService) {
         this.templateEngine = templateEngine;
         this.bookReservationService = bookReservationService;
@@ -48,7 +46,6 @@ public class BookReservationServlet extends HttpServlet {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookTitle = request.getParameter("bookTitle");
         String readerName = request.getParameter("readerName");
@@ -59,17 +56,6 @@ public class BookReservationServlet extends HttpServlet {
 
         String params = String.format("bookTitle=%s&readerName=%s&readerAddress=%s&numberOfCopies=%s",
                 bookReservation.getBookTitle(), bookReservation.getReaderName(), bookReservation.getReaderAddress(), bookReservation.getNumberOfCopies());
-
-        List<String> lastViewed = new ArrayList<>();
-        Object lastViewedSessionObject = request.getSession().getAttribute("lastViewed");
-        if(lastViewedSessionObject != null) {
-            lastViewed = (List<String>) lastViewedSessionObject;
-            if(lastViewed.size() >= MAX_RECENTLY_VIEWED) {
-                lastViewed.removeLast();
-            }
-        }
-        lastViewed.addFirst(bookReservation.getBookTitle());
-        request.getSession().setAttribute("lastViewed", lastViewed);
 
         response.sendRedirect("/bookReservation?" + params);
     }

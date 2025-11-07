@@ -13,6 +13,7 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "BookListServlet", urlPatterns = "")
@@ -26,14 +27,12 @@ public class BookListServlet extends HttpServlet {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(request, response);
 
-        List<Book> books = null;
-        List<String> lastViewed = (List<String>) request.getSession().getAttribute("lastViewed");
+        List<Book> books = new ArrayList<>();
 
         String filterName = request.getParameter("filterName");
         double filterRating = -1;
@@ -52,16 +51,8 @@ public class BookListServlet extends HttpServlet {
 
         WebContext context = new WebContext(webExchange);
         context.setVariable("books", books);
-        context.setVariable("lastViewedBooks", lastViewed);
 
         templateEngine.process("listBooks", context, response.getWriter());
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String filterName = request.getParameter("filterName");
-        String filterRating = request.getParameter("filterRating");
-        String params = String.format("filterName=%s&filterRating=%s", filterName, filterRating);
-        response.sendRedirect("/?" + params);
-    }
 }
