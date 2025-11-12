@@ -27,36 +27,25 @@ public class BookReservationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        IWebExchange webExchange = JakartaServletWebApplication
-                .buildApplication(getServletContext())
-                .buildExchange(request, response);
-
-        String bookTitle = request.getParameter("bookTitle");
-        String readerName = request.getParameter("readerName");
-        String numberOfCopies = request.getParameter("numberOfCopies");
-
-        WebContext context = new WebContext(webExchange);
-        context.setVariable("readerName", readerName);
-        context.setVariable("ipAddress", request.getRemoteAddr());
-        context.setVariable("bookTitle", bookTitle);
-        context.setVariable("numberOfCopies", numberOfCopies);
-
-        templateEngine.process("reservationConfirmation.html", context, response.getWriter());
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookTitle = request.getParameter("bookTitle");
         String readerName = request.getParameter("readerName");
         String readerAddress = request.getParameter("readerAddress");
         int numberOfCopies = Integer.parseInt(request.getParameter("numCopies"));
 
-        BookReservation bookReservation = bookReservationService.placeReservation(bookTitle, readerName, readerAddress, numberOfCopies);
+        IWebExchange webExchange = JakartaServletWebApplication
+                .buildApplication(getServletContext())
+                .buildExchange(request,response);
 
-        String params = String.format("bookTitle=%s&readerName=%s&readerAddress=%s&numberOfCopies=%s",
-                bookReservation.getBookTitle(), bookReservation.getReaderName(), bookReservation.getReaderAddress(), bookReservation.getNumberOfCopies());
+        WebContext webContext= new WebContext(webExchange);
 
-        response.sendRedirect("/bookReservation?" + params);
+        webContext.setVariable("bookTitle", bookTitle);
+        webContext.setVariable("readerName", readerName);
+        webContext.setVariable("readerAddress", readerAddress);
+        webContext.setVariable("numberOfCopies", numberOfCopies);
+
+        bookReservationService.placeReservation(bookTitle, readerName, readerAddress, numberOfCopies);
+
+        templateEngine.process("reservationConfirmation", webContext, response.getWriter());
     }
 }

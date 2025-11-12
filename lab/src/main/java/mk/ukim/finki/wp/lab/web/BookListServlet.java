@@ -18,6 +18,7 @@ import java.util.List;
 
 @WebServlet(name = "BookListServlet", urlPatterns = "")
 public class BookListServlet extends HttpServlet {
+
     private final SpringTemplateEngine templateEngine;
     private final BookService bookService;
 
@@ -31,25 +32,21 @@ public class BookListServlet extends HttpServlet {
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(request, response);
+        WebContext context = new WebContext(webExchange);
+
 
         List<Book> books = new ArrayList<>();
 
-        String filterName = request.getParameter("filterName");
-        double filterRating = -1;
+        String searchText = request.getParameter("searchText");
+        String searchRating = request.getParameter("searchRating");
 
-        try {
-            filterRating = Double.parseDouble(request.getParameter("filterRating"));
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        if(filterName != null && !filterName.isEmpty() && filterRating != -1) {
-            books = bookService.searchBooks(filterName, filterRating);
+        if(searchText != null && !searchText.isEmpty() &&
+                searchRating != null && !searchRating.isEmpty()) {
+            books = bookService.searchBooks(searchText, Double.parseDouble(searchRating));
         } else {
             books = bookService.listAll();
         }
 
-        WebContext context = new WebContext(webExchange);
         context.setVariable("books", books);
 
         templateEngine.process("listBooks", context, response.getWriter());
