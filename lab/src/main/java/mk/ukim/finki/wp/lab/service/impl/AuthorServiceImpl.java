@@ -24,4 +24,9 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findById(Long authorId) {
         return authorRepository.findById(authorId);
     }
+
+    @Override
+    public void likeAuthor(Long id) {
+        authorRepository.likeAuthor(id);
+    }
 }

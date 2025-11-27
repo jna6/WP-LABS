@@ -33,11 +33,17 @@ public class AuthorRepository {
         }
 
     }
-
     public List<Author> findAll() {
         return authors;
     }
     public Author findById(Long id) {
         return authors.stream().filter(a -> a.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public void likeAuthor(Long id){
+        Author author = findById(id);
+        if (author != null) {
+            author.addLike();
+        }
     }
 }

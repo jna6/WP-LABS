@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Authors - Book Reservation App</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .author-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .author-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Meet Our Authors</h1>
+</header>
+<main>
+    <form th:action="@{/authors}" method="get">
+        <h2>Authors List</h2>
+        <div th:each="author : ${authors}" class="author-option">
+            <p>
+                <strong th:text="${author.name + ' ' + author.surname}"></strong><br/>
+                <span th:text="'Likes: ' + ${author.likes}"></span>
+            </p>
+
+            <form th:action="@{'/authors/like/' + ${author.id}}" method="post" style="display:inline;">
+                <button type="submit">Like</button>
+            </form>
+        </div>
+    </form>
+
+    <br/>
+    <a href="/books">← Back to Books</a>
+</main>
+</body>
+</html>

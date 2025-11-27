@@ -11,11 +11,16 @@ public class Author {
     private String surname;
     private String country;
     private String biography;
+    private int likes;
 
     public Author(String name, String surname, String country, String biography) {
         this.name = name;
         this.surname = surname;
         this.country = country;
         this.biography = biography;
+        this.likes = 0;
+    }
+    public void addLike(){
+        this.likes++;
     }
 }
