@@ -7,7 +7,7 @@
 <!-- The form should submit to ArchaeologicalSiteController.create or ArchaeologicalSiteController.update,
      depending on whether we are creating or editing an archaeological site -->
 <form method="post"
-      th:action="@{${formAction}}">
+      th:action="@{${archaeologicalSite == null ? '/' : '/' + archaeologicalSite.id}}">
     <div>
         <label for="name">Site Name</label>
         <input type="text"

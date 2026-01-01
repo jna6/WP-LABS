@@ -2,7 +2,6 @@ package mk.ukim.finki.wp.jan2025g1.web;
 
 import mk.ukim.finki.wp.jan2025g1.model.ArchaeologicalSite;
 import mk.ukim.finki.wp.jan2025g1.model.HistoricalPeriod;
-import mk.ukim.finki.wp.jan2025g1.repository.ArchaeologicalSiteRepository;
 import mk.ukim.finki.wp.jan2025g1.service.ArchaeologicalSiteService;
 import mk.ukim.finki.wp.jan2025g1.service.SiteLocationService;
 import org.springframework.data.domain.Page;
@@ -77,7 +76,7 @@ public class ArchaeologicalSiteController {
     public String showAdd(Model model) {
         model.addAttribute("locations", siteLocationService.listAll());
         model.addAttribute("periods", HistoricalPeriod.values());
-        model.addAttribute("formAction", "/archaeological-sites"); // POST for create
+       // model.addAttribute("formAction", "/archaeological-sites"); // POST for create
 
         return "form";
     }
@@ -95,7 +94,8 @@ public class ArchaeologicalSiteController {
         model.addAttribute("archaeologicalSite", archaeologicalSiteService.findById(id));
         model.addAttribute("locations", siteLocationService.listAll());
         model.addAttribute("periods", HistoricalPeriod.values());
-        model.addAttribute("formAction", "/archaeological-sites/" + id);
+
+        //model.addAttribute("formAction", "/archaeological-sites/" + id);
 
         return "form";
     }
